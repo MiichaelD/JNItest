@@ -6,7 +6,7 @@
 
  JNIEXPORT jstring JNICALL Java_com_android_JNItest_JNItestActivity_stringFromJNICPP(JNIEnv * env, jobject obj)
  {
-     return env->NewStringUTF("Hello, World\nFrom CPP :)");
+     return env->NewStringUTF("Hello World to this awesome calculator from CPP :)");
  }
 
  JNIEXPORT jdouble JNICALL Java_com_android_JNItest_JNItestActivity_operacion
