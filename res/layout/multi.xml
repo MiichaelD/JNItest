@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/askNumbers" />
+        
+        
+        <RadioGroup
+            android:id="@+id/radioGroup1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/radio0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/multi" />
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sum" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/div" />
+            
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dif" />
+        </RadioGroup>
+
+  		<EditText
+        	android:id="@+id/editText1"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:ems="10"
+        	android:inputType="numberDecimal" >
+	
+        	<requestFocus />
+    	</EditText>
+	
+	    <EditText
+        	android:id="@+id/editText2"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:ems="10"
+        	android:inputType="numberDecimal" />
+		
+	    <Button
+        	android:id="@+id/button1"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/ok" />
+</LinearLayout>
