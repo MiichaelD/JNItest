@@ -11,9 +11,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:textColor="#15B72E"
+    android:textColor="#A349A4"
     android:textSize="18sp"
-    android:text="@string/hello" />
+    android:text="@string/hello"
+    android:layout_margin="2dp" />
 
 <ListView android:id="@+id/in"
         android:layout_width="match_parent"
@@ -21,11 +22,12 @@
         android:stackFromBottom="false"
         android:transcriptMode="alwaysScroll"
         android:layout_weight="1"
-    />
+        android:layout_margin="2dp" />
 
 <Button android:id="@+id/btn_calc" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="2dp"
         android:text="@string/calcu"/>
 
 </LinearLayout>

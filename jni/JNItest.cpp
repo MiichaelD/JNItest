@@ -1,8 +1,17 @@
+
+#include <errno.h>
+
 #include <string.h>
 #include <android/log.h>
 #include "com_android_JNItest_JNItestActivity.h"
 
 #define TAG "JNItest-CPP"
+
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, __VA_ARGS__))
+
+
+
 
  JNIEXPORT jstring JNICALL Java_com_android_JNItest_JNItestActivity_stringFromJNICPP(JNIEnv * env, jobject obj)
  {
@@ -13,7 +22,8 @@
    (JNIEnv *env , jobject obj, jdouble a, jdouble b, jint op)
  {
 
-	 __android_log_print(ANDROID_LOG_INFO,TAG,"A= %f, B=%f, Op=%d",a,b,op);
+	 //__android_log_print(ANDROID_LOG_INFO,TAG,"A= %f, B=%f, Op=%d",a,b,op);
+	 LOGI(TAG,"Received: A= %f, B=%f, Op=%d",a,b,op);
 	 switch(op){
 	 case 1: return a*b;
 	 case 2: return a+b;

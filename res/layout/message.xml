@@ -13,10 +13,29 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textColor="#0099CC"
-    android:textSize="18sp"
+    android:layout_height="match_parent"
     android:padding="5dp"
-/>
+    android:layout_gravity="center_vertical"  >
+
+	<TextView
+	    android:id="@+id/tv_1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal"
+	    android:layout_weight="1"
+	    android:textColor="#15B72E"
+	    android:textSize="18sp" />
+	
+	<TextView
+	    android:id="@+id/tv_2"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal"
+	    android:layout_weight="1"
+	    android:textColor="#0099CC"
+	    android:textSize="18sp"/>
+
+</LinearLayout>

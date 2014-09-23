@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,10 +17,21 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+/** This project is used to test JNI functions excecuting code in C++ from Java
+ * 
+ * Also it uses a CustomArrayAdapter to fit data in a custom view and displays it
+ * in a ListView.
+ * 
+ * Plus, added functionality to handle screen rotations, saving contents from the
+ * ArrayAdapter and resoring them when the screen is created again. to achieve this
+ * I implemented the interface Parcelable to the class Result to Marshal it, store it
+ * and restore it easily.d */
 public class JNItestActivity extends Activity {
-    /** Called when the activity is first created. */
+   
 	public static String TAG="JNItest";
-	public boolean debug = true && BuildConfig.DEBUG;
+	private static final String OPS_KEY = "OPERATIONS_KEY";
+	public static boolean debug = true && BuildConfig.DEBUG;
 	public int op=0;
 	
 	// Views
@@ -30,11 +40,18 @@ public class JNItestActivity extends Activity {
 	public Button btn_Calc;
 	
 	//Array adapter for the Result thread
-    private ArrayAdapter<String> mResultArrayAdapter;
-	
+    private CustomArrayAdapter mResultArrayAdapter;
 	
 	public Dialog menu;
 	
+
+    
+    static{
+    	Log.i(TAG,"Static Lib Loading");
+    	System.loadLibrary("JNItest");
+    }
+    
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	if(debug)
@@ -55,7 +72,7 @@ public class JNItestActivity extends Activity {
             }
         });
         
-        mResultArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+        mResultArrayAdapter = new CustomArrayAdapter(this, R.layout.message);
         
         mResultsView = (ListView) findViewById(R.id.in);
         mResultsView.setAdapter(mResultArrayAdapter);
@@ -75,39 +92,38 @@ public class JNItestActivity extends Activity {
        	 			Log.i(TAG,"Multiply-OK");
                 try {
                 	
+                	String operator = null;
+                	
                 	switch(r1.getCheckedRadioButtonId()){
-                	case R.id.radio0:op=1;break;
-                	case R.id.radio1:op=2;break;
-                	case R.id.radio2:op=3;break;
-                	case R.id.radio3:op=4;break;
+                	case R.id.radio0:op=1;
+	                	operator = "x"; 
+	                	break;
+                	case R.id.radio1:op=2;
+	                	operator = "+"; 
+	                	break;
+                	case R.id.radio2:op=3;
+	                	operator = "/"; 
+	                	break;
+                	case R.id.radio3:op=4;
+	                	operator = "-"; 
+	                	break;
                 	}
                 	
                 	if(debug)
            	 			Log.i(TAG,"Operacion: "+op);
-                		
                 	
-                	
-                	//tv.append
-                	mResultArrayAdapter.add("\nResultado: "+operacion(
-                			Double.parseDouble(
-                					(
-                					((EditText)menu.findViewById(R.id.editText1))
-                					.getText()
-                					).toString()
-                					),
-                			Double.parseDouble((((EditText)menu.findViewById(R.id.editText2)).getText()).toString()),
-                			op)               			
-                			);
+                		Result  r = new Result();
+                		r.setOperator(operator);
+                		r.setX(Double.parseDouble(((EditText)menu.findViewById(R.id.editText1)).getText().toString()));
+                		r.setY(Double.parseDouble(((EditText)menu.findViewById(R.id.editText2)).getText().toString()));
+                		r.setRes(operacion(r.getX(),r.getY(), op));
+                	mResultArrayAdapter.add(r);
                 	menu.dismiss();
-				} catch (Throwable e) {	if(debug) 		Log.e(TAG,e.getMessage()+" - Click");
+				} catch (Throwable e) {		if(debug) 		Log.e(TAG,e.getMessage()+" - Click");
 					Toast.makeText(JNItestActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
 				}
             }
         });
-    }
-    
-    static{
-    	System.loadLibrary("JNItest");
     }
     
     public native String stringFromJNICPP();
@@ -131,14 +147,12 @@ public class JNItestActivity extends Activity {
         	menu.show();
             return true;
         default:
-            
             return false;
         }
     }
     
-    /* (non-Javadoc)
-	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
-	 */
+    /** Save data from ListView when rotating the device 
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle) */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
@@ -146,9 +160,9 @@ public class JNItestActivity extends Activity {
 	    		Log.i(TAG,"onRestoreInstanceState restoring  values");
 		// Initialize the array adapter for the conversation thread
         if (savedInstanceState != null) {
-            String[] values = savedInstanceState.getStringArray("operations");
-            for (String str : values) {
-            	mResultArrayAdapter.add(str);
+        	Result[] values = (Result[]) savedInstanceState.getParcelableArray(OPS_KEY);
+            for (Result result : values) {
+            	mResultArrayAdapter.add(result);
             }
         }
 	}
@@ -162,12 +176,11 @@ public class JNItestActivity extends Activity {
         if(debug)
     		Log.i(TAG,"onSaveInstanceState saving "+operations+" values");
         
-        String[] values =  new String[operations];
-        for(int i =0 ; i < operations;i++){
+        Result[] values =  new Result[operations];
+        for(int i =0 ; i < operations;i++)
         	values[i] = mResultArrayAdapter.getItem(i);
-        }
-        savedState.putStringArray("operations", values);
-
+        
+        savedState.putParcelableArray(OPS_KEY, values);
     }
     
 }
